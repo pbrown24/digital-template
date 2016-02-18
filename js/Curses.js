@@ -7,7 +7,7 @@ function preload() {
     game.load.spritesheet('button1', 'assets/button1_sprites.png', 311, 523);
     game.load.spritesheet('button2', 'assets/button2_sprites.png', 495.6, 606);
     game.load.spritesheet('button3', 'assets/button3_sprites.png', 309.6, 365);
-    game.load.audio('fx', 'assets/Click On.mp3');
+    game.load.audio('heart', 'assets/Slow_HeartBeat01.wav');
     game.load.audio('fx', 'assets/Click On.mp3');
     //game.load.image('optionA', 'assets/optionA.png');
 }
@@ -18,6 +18,7 @@ var sprite;
 var timer;
 var total = 30;
 var background;
+var heart;
 
 function create() {
     //Aligns canvas to center
@@ -32,7 +33,10 @@ function create() {
     sprite = game.add.sprite(400, 300, 'pointer');
     sprite.anchor.setTo(0.5, 0.5);
     //Audio for buttons
+    heart = game.add.audio('heart')
+    heart.onDecoded.add(start, this);
     fx = game.add.audio('fx');
+    
     fx.allowMultiple = true;
 
     //  Enable Arcade Physics for the sprite
@@ -49,15 +53,20 @@ function create() {
     button.onInputOut.add(out, this);
     button.onInputUp.add(up, this);
     //  Create our Timer
-    timer = game.time.create(true);
+    var timer = game.time.create(false);
     timer.start();
     //  Set a TimerEvent to occur after 1 second
     timer.loop(1000, updateCounter, this);
-
+   
     //  Start the timer running - this is important!
     //  It won't start automatically, allowing you to hook it to button events and the like.
 
 
+}
+
+function start()
+{
+   heart.fadeIn(30000);
 }
 
 function update() {
