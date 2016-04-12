@@ -3,6 +3,9 @@ var game = new Phaser.Game(1000, 800, Phaser.AUTO, 'game', { preload: preload, c
 function preload() {
     game.load.image('pointer', 'assets/pointer.png');
     game.load.image('backdrop', 'assets/Crypt Sentinals.jpg');
+    game.load.image('hide', 'assets/hide.png');
+    game.load.image('fight', 'assets/fight_the_sentinals.png');
+    game.load.image('add_turn', 'assets/double_back.png');
     game.load.spritesheet('button', 'assets/button_sprite_sheet.png', 193, 71);
     game.load.spritesheet('button1', 'assets/button1_sprites.png', 311, 523);
     game.load.spritesheet('button2', 'assets/button2_sprites.png', 495.6, 606);
@@ -49,15 +52,20 @@ function create() {
     var button1 = game.add.button( 40, 650, 'button1', actionOnClick1, this, 2, 1, 0);
     var button3 = game.add.button( 1300, 820, 'button3', actionOnClick3, this, 2, 1, 0);
     var button2 = game.add.button( 710, 576, 'button2', actionOnClick2, this, 2, 1, 0);
-    button.onInputOver.add(over, this);
-    button.onInputOut.add(out, this);
-    button.onInputUp.add(up, this);
+    button1.onInputOver.add(over1, this);
+    button1.onInputOut.add(out1, this);
+    button1.onInputUp.add(up, this);
+    button2.onInputOver.add(over2, this);
+    button2.onInputOut.add(out2, this);
+    button2.onInputUp.add(up, this);
+    button3.onInputOver.add(over3, this);
+    button3.onInputOut.add(out3, this);
+    button3.onInputUp.add(up, this);
     //  Create our Timer
     var timer = game.time.create(false);
-    timer.start();
-    //  Set a TimerEvent to occur after 1 second
+    timer.start(); 
     timer.loop(1000, updateCounter, this);
-   
+    //  Set a TimerEvent to occur after 1 second
     //  Start the timer running - this is important!
     //  It won't start automatically, allowing you to hook it to button events and the like.
 
@@ -65,7 +73,7 @@ function create() {
 }
 
 function start()
-{
+{  
    heart.fadeIn(30000);
 }
 
@@ -83,12 +91,9 @@ function render() {
             game.debug.text('You Lose', 400, 120);
         }
     game.debug.text('Time Left: ' + total, 32, 120);
-    game.debug.text('Explorer 1 health: ' + health1, 32, 140);
-    game.debug.text('Explorer 1 Pace: ' + pace1, 32, 160);
-    game.debug.text('Explorer 2 health: ' + health2 , 32, 180);
-    game.debug.text('Explorer 2 Pace: ' + pace2, 32, 200);
-    game.debug.text('Explorer 3 health: ' + health3 , 32, 220);
-    game.debug.text('Explorer 3 Pace: ' + pace3, 32, 240);
+    game.debug.text('Explorer 1 | Health: ' + health1 + ' | Pace: ' + pace1, 32, 140);
+    game.debug.text('Explorer 2 | Health: ' + health2 + ' | Pace: ' + pace2 , 32, 180);
+    game.debug.text('Explorer 3 | Health: ' + health3 + ' | Pace: ' + pace3 , 32, 220);
     game.debug.text('Turns to escape: ' + turns, 800, 120);
     //game.debug.spriteBounds(button);
     //game.debug.spriteCorners(button, true, true);
@@ -114,13 +119,30 @@ function up() {
     console.log('button up', arguments);
 }
 
-function over() {
-    console.log('button over');
-    
+function over1() {
+    console.log('button over')
+    var double_back = game.add.sprite(40, 650, 'add_turn');
+}
+function over2() {
+    console.log('button over')
+    var fight = game.add.sprite(710, 576, 'fight');
+}
+function over3() {
+    console.log('button over')
+    var hide = game.add.sprite(1300, 820, 'hide');
 }
 
-function out() {
+function out1() {
     console.log('button out');
+    //double_back.destroy;
+}
+function out2() {
+    console.log('button out');
+    //fight.destroy;
+}
+function out3() {
+    console.log('button out');
+    //hide.destroy;
 }
 
 function actionOnClick1 () {
@@ -142,7 +164,7 @@ function actionOnClick1 () {
 }
 
 function actionOnClick2 () {
-    //Fight the sentinel. All lose 1 pace, and 1 health1
+    //Fight the sentinel. All lose 1 pace, and 1 health
     if(health1 > 0)
         {
             health1 -= 1;
